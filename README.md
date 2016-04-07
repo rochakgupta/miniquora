@@ -1,1 +1,1 @@
-A minimalistic Q/A website that I am making using Materialize CSS Framework for front-end and Django Framework for back-end.
+A minimalist Q/A website that I am making using Materialize CSS Framework for front-end and Django Framework for back-end.
