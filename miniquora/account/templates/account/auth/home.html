@@ -1,0 +1,172 @@
+{% extends 'common/base.html' %} 
+{% load staticfiles %}
+{% block title %} My Profile {% endblock %}
+{% block extrahead %} 
+<link href="{% static 'account/auth/css/home.css' %}" rel="stylesheet">
+{% endblock %}
+{% block header-content %}
+<ul id="nav-mobile" class="right">
+    <li><a href="#" class="dropdown-button teal-text" data-beloworigin="false" data-activates="dropdown1">{{ request.user.username }}</a>
+        <ul id="dropdown1" class="dropdown-content" style="opacity:1;">
+            <li><a href="{% url 'all-questions' %}">All Questions</a></li>
+            <li><a href="{% url 'edit-profile' id=request.user.id %}">Edit Profile</a></li>
+            <li><a href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}">Log Out</a></li>
+        </ul>
+    </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col s12 m10 offset-m1">
+        <div class="card" style="margin-top:20px;">
+            <div class="card-content">
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5>My Questions<h5></div>
+                <div class="row center" style="margin-top:5px;" id="search-div">
+                    <input class="left col s10 m8 offset-s1 offset-m2" type="text" id="search" placeholder="Search Question">
+                </div>
+                <div class="collection" style="margin-top:20px;" id="results">
+                    {% for q in q_list %}
+                        <div class="collection-item">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h6 class="card-title" style="line-height:normal;"><a href="{% url 'show-question' id=q.id %}" class="q-title">{{ q.title }}</a></h6>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;margin-bottom:10px;">
+                                <div class="col s12">
+                                    <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                    {% if page.has_previous or page.has_next %}
+                    <div class="row" style="margin-top:35px;">
+                        {% if page.has_previous %}
+                        <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
+                        {% endif %}
+                        {% if page.has_next %}
+                        <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block other %}
+<div class="fixed-action-btn" style="bottom: 40px; right: 40px;">
+    <a class="btn-floating btn-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
+</div>
+{% endblock %}
+        
+{% block scripts %}
+<script>
+QSearch = (function () {
+    var el, results_div, results_div_html, results_after_div;
+
+    function updateResults(questions) {
+
+        var se = document.getElementById('search-result');
+        if (se) {
+            if (questions.length === 0) {
+                se.innerHTML = 'No Results.';
+            } else if (questions.length === 1) {
+                se.innerHTML = questions.length + ' question found.';
+            } else {
+                se.innerHTML = questions.length + ' questions found.';
+            }
+        } else {
+            var ul = document.createElement('ul');
+            ul.setAttribute('class', 'collection with-header center col s10 offset-s1');
+            var li = document.createElement('li');
+            li.setAttribute('class', 'collection-header');
+            li.setAttribute('id', 'search-result');
+            if (questions.length === 0) {
+                li.innerHTML = 'No Results.';
+            } else if (questions.length === 1) {
+                li.innerHTML = questions.length + ' question found.';
+            } else {
+                li.innerHTML = questions.length + ' questions found.';
+            }
+            ul.appendChild(li)
+            $(ul.outerHTML).insertAfter('#search');
+        }
+
+        results_div.empty();
+        results_after_div.remove();
+        
+        for (var i = 0; i < questions.length; i++) {
+            var item = document.createElement('div');
+            item.setAttribute('class', 'collection-item');
+            var inner = '<div class="row">' +
+                            '<div class="col s12">' +
+                                '<h6 class="card-title" style="line-height:normal;"><a href="/question/' + questions[i].id + '/" class="q-title">' + questions[i].title + '</a></h6>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
+                            '<div class="col s12">' +
+                                '<a href="/question/' + questions[i].id + '/edit/" class="btn waves-effect waves-light right">Edit</a>' +
+                            '</div>'
+                        '</div>';
+            item.innerHTML = inner;
+            results_div.append(item);
+        }
+
+    }
+
+    function search() {
+        var term = $(this).val().trim();
+        if (term !== '') {
+            $.ajax({
+                url: "{% url 'search-my-questions' id=request.user.id %}",
+                data: {
+                    'q': term
+                },
+                type: 'GET',
+                success: function (data, status, xhr) {
+                    updateResults(data['questions']);
+                },
+                error: function (jqXHR, exception) {
+                    var se = document.getElementById('search-result');
+                    if (se) {
+                        se.innerHTML = 'Something went wrong.';
+                    }
+                    else {
+                        var ul = document.createElement('ul');
+                        ul.setAttribute('class', 'collection with-header center col s10 offset-s1');
+                        var li = document.createElement('li');
+                        li.setAttribute('class', 'collection-header');
+                        li.setAttribute('id', 'search-result');
+                        li.innerHTML = 'Something went wrong.';
+                        ul.appendChild(li)
+                        $(ul.outerHTML).insertAfter('#search');
+                    }
+                }
+            });
+        } else {
+            el.nextAll().remove();
+            results_div.html(results_div_html);
+            $(results_after_div).insertAfter(results_div);
+        }
+    }
+
+    function init() {
+        results_div = $('#results');
+        results_div_html = results_div.html();
+        results_after_div = results_div.next();
+        el = $('#search');
+        el.on('input', search);
+    }
+    return {
+        init: init
+    };
+})();
+
+$(document).ready(function () {
+    QSearch.init();
+});
+</script>
+{% endblock %}
+

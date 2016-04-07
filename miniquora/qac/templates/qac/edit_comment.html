@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %} 
+{% block page_title %} Edit Comment {% endblock %} 
+{% load material_form %}
+{% block content %}
+<div class="row">
+    <div class="col s12 m10 l8 offset-m1 offset-l2">
+        <div class="card-panel" style="margin-bottom:0;margin-top:20px;">
+            <h4> Edit Comment </h4>
+            <form action="{% url 'edit-comment' id=q_id a_id=a_id c_id=c_id %}" method='POST'>
+                {% csrf_token %}
+                {% form form=f %}
+                {% endform %}
+                <div class="row center">
+                    <div class="col s12">
+                        <button type="submit" id="edit_comment-btn" name="edit_comment" class="btn waves-effect waves-light">Update Comment</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

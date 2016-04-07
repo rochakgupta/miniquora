@@ -1,0 +1,167 @@
+{% extends 'common/questions.html' %}
+{% load staticfiles %}
+{% block title %} {{ q.title }} {% endblock %}
+{% block extrahead %} 
+<link href="{% static 'qac/css/detail.css' %}" rel="stylesheet">
+{% endblock %}
+{% load material_form %} 
+{% block content %}
+<div class="row">
+    <div class="col s12 m10 offset-m1">
+        <div class="card" style="margin-bottom:0;margin-top:20px;">
+            <div class="card-content">
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
+                    <h5 class="q_head">Question<h5>
+                </div>
+                <div class="collection" style="margin-top:20px;">
+                    <div class="collection-item">
+                        
+                        {% comment %}
+                        <h5 class="card-panel" style="line-height:normal;margin-top:20px;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
+                        {% endcomment %}
+                        
+                        <h5 style="line-height:normal;margin-top:20px;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
+                        <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
+                        {% if request.user == q.created_by %}
+                        <div class="row" style="margin-top: 20px;margin-bottom:10px;">
+                            <div class="col s12">
+                                <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
+                            </div>
+                        </div>
+                        {% else %}
+                            {% if not a_user %}
+                            <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
+                                <div class="col s6">
+                                    <a href="{% url 'add-answer' id=q.id %}" class="btn waves-effect waves-light left">Answer</a>
+                                </div>
+                                <div class="col s6">
+                                    <p class="right">{{ q.created_by }}</p>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
+                                <div class="col s12">
+                                    <p class="right">{{ q.created_by }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>        
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if a_user %}
+<div class="row">
+    <div class="col s12 m10 offset-m1">
+        <div class="card" style="margin-top:0;margin-bottom:0;">
+            <div class="card-content">
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5 class="a_head">Your Answer<h5></div>
+                <div class="collection" style="margin-top:20px;">
+                    <div class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom:0px;">
+                            <div class="col s12">
+                                <h5 class="card-title" style="line-height:normal;"><span class="a_text">{{ a_user.text }}</span></h5>
+                                <div class="row">
+                                    <a href="{% url 'edit-answer' id=q.id a_id=a_user.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                </div>
+                                {% with c_list=a_user.comments.all %}
+                                {% if c_list %}
+                                <div class="card-title center" style="color:teal;"><h6 class="c_head">Comments<h6></div>
+                                <ul class="collection" style="margin-bottom:0;">
+                                    {% for c in c_list %}
+                                        <li class="collection-item"> 
+                                            <div class="row c_text" style="line-height:normal; margin-bottom:10px;">
+                                            <span class="col s12" style="margin-bottom:10px;">{{ c.text }}</span>
+                                            {% if c.created_by == request.user %}
+                                                <a href="{% url 'edit-comment' id=q.id a_id=a_user.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                            {% else %}
+                                                <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
+                                            {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <div class="row center" style="margin-bottom:10px;">
+                            <div class="col s12">
+                                <a href="{% url 'add-comment' id=q.id a_id=a_user.id %}" class="btn waves-effect waves-light">Comment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+        
+{% if a_list %}
+<div class="row">
+    <div class="col s12 m10 offset-m1">
+        <div class="card" style="margin-top:0;">
+            <div class="card-content">
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5 class="a_head">Answers<h5></div>
+                <div class="collection" style="margin-top:20px;">
+                    {% for a in a_list %}
+                        <div class="collection-item">
+                            <div class="row valign-wrapper">
+                                <div class="col s12">
+                                    
+                                    {% comment %}
+                                    <input type="text" class="card-title" value="{{ a.text }}"></input>
+                                    <div class="card-title" style="line-height:normal;"><h6>{{ a.text }}<h6></div>
+                                    <h5 class="card-title" style="line-height:normal;"><span class="a_text">{{ a.text }}</span></h5>
+                                    {% endcomment %}
+                            
+                                    <h5 class="card-title" style="line-height:normal;"><span class="a_text">{{ a.text }}</span></h5>
+                                    {% if a.created_by == request.user %}
+                                    <div class="row">
+                                        <a href="{% url 'edit-answer' id=q.id a_id=a.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;margin-bottom:5px;">Edit</a>
+                                    </div>
+                                    {% else %}
+                                    <div class="row" style="margin-bottom:5px;">
+                                        <p class="right" style="margin-right:10px;">{{ a.created_by }}</p>
+                                    </div>
+                                    {% endif %}
+                                    {% with c_list=a.comments.all %}
+                                    {% if c_list %}
+                                    <div class="card-title center" style="color:teal;"><h6 class="c_head">Comments<h6></div>
+                                    <ul class="collection" style="margin-bottom:0;">
+                                        {% for c in c_list %}
+                                            <li class="collection-item"> 
+                                                <div class="row c_text" style="line-height:normal; margin-bottom:10px;">
+                                                <span class="col s12" style="margin-bottom:10px;">{{ c.text }}</span>
+                                                {% if c.created_by == request.user %}
+                                                    <a href="{% url 'edit-comment' id=q.id a_id=a.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                {% else %}
+                                                    <p class="right" style="margin-right:10px;">{{ c.created_by }}</p>
+                                                {% endif %}
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                            <div class="row center" style="margin-bottom:10px;">
+                                <div class="col s12">
+                                    <a href="{% url 'add-comment' id=q.id a_id=a.id %}" class="btn waves-effect waves-light">Comment</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

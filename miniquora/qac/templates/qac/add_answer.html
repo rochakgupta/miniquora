@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %} 
+{% block page_title %} Add Answer {% endblock %} 
+{% load material_form %}
+{% block content %}
+<div class="row">
+    <div class="col s12 m10 l8 offset-m1 offset-l2">
+        <div class="card-panel" style="margin-bottom:0;margin-top:20px;">
+            <h4> Add Answer </h4>
+            <form action="{% url 'add-answer' id=q_id %}" method='POST'>
+                {% csrf_token %} 
+                {% form form=f %}
+                {% endform %}
+                <div class="row center">
+                    <div class="col s12">
+                        <button type="submit" id="add_answer-btn" name="add_answer" class="btn waves-effect waves-light">Add Answer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

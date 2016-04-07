@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title> {% block title %} Questions {% endblock %} </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'common/css/font-awesome.min.css' %}" rel="stylesheet">
+        {% include 'material/includes/material_css.html' %}
+        <link href="{% static 'common/css/questions.css' %}" rel="stylesheet">
+        {% block extrahead %} {% endblock %}
+    </head>
+    <body class="teal">
+        <header>
+            <nav class="top-nav white">
+                <div class="nav-wrapper">
+                    <a href="{% url 'all-questions' %}" class="brand-logo teal-text center">Miniquora</a>
+                    {% block header-content %}
+                    {% url 'login' as login_url %}
+                    {% if request.user.is_authenticated %}
+                        <ul id="nav-mobile" class="right">
+                            <li><a href="#" class="dropdown-button teal-text" data-beloworigin="false" data-activates="dropdown1">{{ request.user.username }}</a>
+                                <ul id="dropdown1" class="dropdown-content" style="opacity:1;">
+                                    <li><a href="{% url 'all-questions' %}">All Questions</a></li>
+                                    <li><a href="{% url 'home' id=request.user.id %}">My Profile</a></li>
+                                    <li><a href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}">Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% elif request.path != login_url %}
+                        <ul id="nav-mobile" class="right">
+                            <li><a href="{% url 'login' %}?next={{ request.META.PATH_INFO }}" class="teal-text">Login</a></li>
+                        </ul>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </nav>
+        </header>
+        <main class="container">
+            {% block content %} {% endblock %}
+        </main>
+        {% block other %}
+        <div class="fixed-action-btn" style="bottom: 40px; right: 40px;">
+            <a class="btn-floating btn-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
+        </div>
+        {% endblock %}
+        <script src="{% static 'common/js/jquery-2.2.1.min.js' %}"></script>
+        {% include 'material/includes/material_js.html' %}
+        {% comment "Make card-panels hoverable" %}
+        <script>
+        var these = document.querySelectorAll('div.card-panel');
+        for(var i=0;i<these.length;i++){
+            var this_one = these[i];
+            var now = this_one.getAttribute('class');
+            this_one.setAttribute('class', now + ' hoverable');
+        }
+        </script>
+        {% endcomment %}
+        {% block scripts %} {% endblock %}
+    </body>
+</html>

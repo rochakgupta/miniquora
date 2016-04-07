@@ -1,0 +1,14 @@
+{% extends 'common/base.html' %} 
+{% block title %}
+Activation Successful
+{% endblock %}
+{% block content %} 
+<div class="row">
+    <div class="col s12 m10 l8 offset-m1 offset-l2">
+    <div class="card-panel" style="margin-bottom:0;margin-top:20px;"> Hey, {{ u.username }}. Your account has been activated. 
+<a href="{% url 'login' %}">Login</a> to continue.</div>
+    </div>
+</div>
+{% endblock %}
+
+
