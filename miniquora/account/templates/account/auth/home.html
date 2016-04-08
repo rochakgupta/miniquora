@@ -20,7 +20,9 @@
     <div class="col s12 m10 offset-m1">
         <div class="card" style="margin-top:20px;">
             <div class="card-content">
-                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5>My Questions<h5></div>
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
+                    <h5>My Questions</h5>
+                </div>
                 <div class="row center" style="margin-top:5px;" id="search-div">
                     <input class="left col s10 m8 offset-s1 offset-m2" type="text" id="search" placeholder="Search Question">
                 </div>
@@ -40,16 +42,16 @@
                         </div>
                     {% endfor %}
                 </div>
-                    {% if page.has_previous or page.has_next %}
-                    <div class="row" style="margin-top:35px;">
-                        {% if page.has_previous %}
-                        <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
-                        {% endif %}
-                        {% if page.has_next %}
-                        <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
-                        {% endif %}
-                    </div>
+                {% if page.has_previous or page.has_next %}
+                <div class="row" style="margin-top:35px;">
+                    {% if page.has_previous %}
+                    <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
+                    {% if page.has_next %}
+                    <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -83,6 +85,7 @@ QSearch = (function () {
             var li = document.createElement('li');
             li.setAttribute('class', 'collection-header');
             li.setAttribute('id', 'search-result');
+            li.setAttribute('style', 'border:none;');
             if (questions.length === 0) {
                 li.innerHTML = 'No Results.';
             } else if (questions.length === 1) {
@@ -113,6 +116,13 @@ QSearch = (function () {
             item.innerHTML = inner;
             results_div.append(item);
         }
+        
+        if (questions.length === 0){
+            results_div.attr('style','margin-top:20px; display:none;');
+        }
+        else {
+            results_div.attr('style','margin-top:20px;');
+        }
 
     }
 
@@ -139,6 +149,7 @@ QSearch = (function () {
                         var li = document.createElement('li');
                         li.setAttribute('class', 'collection-header');
                         li.setAttribute('id', 'search-result');
+                        li.setAttribute('style', 'border:none;');
                         li.innerHTML = 'Something went wrong.';
                         ul.appendChild(li)
                         $(ul.outerHTML).insertAfter('#search');
@@ -148,6 +159,7 @@ QSearch = (function () {
         } else {
             el.nextAll().remove();
             results_div.html(results_div_html);
+            results_div.attr('style','margin-top:20px;');
             $(results_after_div).insertAfter(results_div);
         }
     }

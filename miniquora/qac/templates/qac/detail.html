@@ -11,7 +11,7 @@
         <div class="card" style="margin-bottom:0;margin-top:20px;">
             <div class="card-content">
                 <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
-                    <h5 class="q_head">Question<h5>
+                    <h5 class="q_head">Question</h5>
                 </div>
                 <div class="collection" style="margin-top:20px;">
                     <div class="collection-item">
@@ -48,7 +48,6 @@
                         {% endif %}
                     </div>
                 </div>        
-                
             </div>
         </div>
     </div>
@@ -59,7 +58,9 @@
     <div class="col s12 m10 offset-m1">
         <div class="card" style="margin-top:0;margin-bottom:0;">
             <div class="card-content">
-                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5 class="a_head">Your Answer<h5></div>
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
+                    <h5 class="a_head">Your Answer</h5>
+                </div>
                 <div class="collection" style="margin-top:20px;">
                     <div class="collection-item">
                         <div class="row valign-wrapper" style="margin-bottom:0px;">
@@ -70,7 +71,9 @@
                                 </div>
                                 {% with c_list=a_user.comments.all %}
                                 {% if c_list %}
-                                <div class="card-title center" style="color:teal;"><h6 class="c_head">Comments<h6></div>
+                                <div class="card-title center" style="color:teal;">
+                                    <h6 class="c_head">Comments</h6>
+                                </div>
                                 <ul class="collection" style="margin-bottom:0;">
                                     {% for c in c_list %}
                                         <li class="collection-item"> 
@@ -107,7 +110,9 @@
     <div class="col s12 m10 offset-m1">
         <div class="card" style="margin-top:0;">
             <div class="card-content">
-                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;"><h5 class="a_head">Answers<h5></div>
+                <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
+                    <h5 class="a_head">Answers</h5>
+                </div>
                 <div class="collection" style="margin-top:20px;">
                     {% for a in a_list %}
                         <div class="collection-item">
@@ -115,8 +120,10 @@
                                 <div class="col s12">
                                     
                                     {% comment %}
-                                    <input type="text" class="card-title" value="{{ a.text }}"></input>
-                                    <div class="card-title" style="line-height:normal;"><h6>{{ a.text }}<h6></div>
+                                    <input type="text" class="card-title" value="{{ a.text }}">
+                                    <div class="card-title" style="line-height:normal;">
+                                        <h6>{{ a.text }}</h6>
+                                    </div>
                                     <h5 class="card-title" style="line-height:normal;"><span class="a_text">{{ a.text }}</span></h5>
                                     {% endcomment %}
                             
@@ -132,7 +139,9 @@
                                     {% endif %}
                                     {% with c_list=a.comments.all %}
                                     {% if c_list %}
-                                    <div class="card-title center" style="color:teal;"><h6 class="c_head">Comments<h6></div>
+                                    <div class="card-title center" style="color:teal;">
+                                        <h6 class="c_head">Comments</h6>
+                                    </div>
                                     <ul class="collection" style="margin-bottom:0;">
                                         {% for c in c_list %}
                                             <li class="collection-item"> 
