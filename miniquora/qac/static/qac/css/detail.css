@@ -1,3 +1,4 @@
+/*
 .q_head {
     
 }
@@ -24,4 +25,32 @@
 
 .c_text {
 
+}*/
+
+.q_head {
+    
+}
+
+.q_title {
+    font-size: 1.2rem;
+}
+
+.q_text {
+    font-size: 1.1rem;
+}
+
+.a_head {
+    
+}
+
+.a_text {
+    font-size: 1.1rem;
+}
+
+.c_head {
+    
+}
+
+.c_text {
+    font-weight: 300;
 }

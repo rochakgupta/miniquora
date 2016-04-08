@@ -77,8 +77,8 @@
                                 <ul class="collection" style="margin-bottom:0;">
                                     {% for c in c_list %}
                                         <li class="collection-item"> 
-                                            <div class="row c_text" style="line-height:normal; margin-bottom:10px;">
-                                            <span class="col s12" style="margin-bottom:10px;">{{ c.text }}</span>
+                                            <div class="row" style="line-height:normal; margin-bottom:10px;">
+                                            <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
                                             {% if c.created_by == request.user %}
                                                 <a href="{% url 'edit-comment' id=q.id a_id=a_user.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                             {% else %}
@@ -145,8 +145,8 @@
                                     <ul class="collection" style="margin-bottom:0;">
                                         {% for c in c_list %}
                                             <li class="collection-item"> 
-                                                <div class="row c_text" style="line-height:normal; margin-bottom:10px;">
-                                                <span class="col s12" style="margin-bottom:10px;">{{ c.text }}</span>
+                                                <div class="row" style="line-height:normal; margin-bottom:10px;">
+                                                <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
                                                 {% if c.created_by == request.user %}
                                                     <a href="{% url 'edit-comment' id=q.id a_id=a.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                                 {% else %}

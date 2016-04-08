@@ -91,7 +91,7 @@ def search_my_questions(request, id=None):
     questions = request.user.questions_created.filter(
         Q(title__icontains = query_term)|Q(text__icontains = query_term)
     ).order_by('-created_on')
-    data['questions'] = [{'id' : q.id, 'title' : q.title } for q in questions]
+    data['questions'] = [{'id' : q.id, 'title' : q.title, 'text' : q.text } for q in questions]
     return JsonResponse(data)
 
 
