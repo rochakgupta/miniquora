@@ -1,9 +1,13 @@
-.q-title {
+.q_title {
     text-decoration:none;
     color: black;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
-.q-title:hover {
+.q_title:hover {
     color: #009688;
+}
+
+.q_text {
+    font-size: 1.3rem;
 }

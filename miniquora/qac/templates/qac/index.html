@@ -22,7 +22,7 @@
                         <div class="collection-item">
                             <div class="row">
                                 <div class="col s12">
-                                    <h6 class="card-title" style="line-height:normal;"><a href="{% url 'show-question' id=q.id %}" class="q-title">{{ q.title }}</a></h6>
+                                    <h6 class="card-title" style="line-height:normal;"><a href="{% url 'show-question' id=q.id %}" class="q_title">{{ q.title }}</a></h6>
                                 </div>
                             </div>
                             {% if request.user == q.created_by %}
@@ -106,7 +106,7 @@ QSearch = (function () {
             item.setAttribute('class', 'collection-item');
             var inner = '<div class="row">' +
                             '<div class="col s12">' +
-                                '<h6 class="card-title" style="line-height:normal;"><a href="/question/' + questions[i].id + '/" class="q-title">' + questions[i].title + '</a></h6>' +
+                                '<h6 class="card-title" style="line-height:normal;"><a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a></h6>' +
                             '</div>' +
                         '</div>';
             if ('{{ request.user.username }}' === questions[i].created_by) {
