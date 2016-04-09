@@ -44,16 +44,6 @@
         {% endblock %}
         <script src="{% static 'common/js/jquery-2.2.1.min.js' %}"></script>
         {% include 'material/includes/material_js.html' %}
-        {% comment "Make card-panels hoverable" %}
-        <script>
-        var these = document.querySelectorAll('div.card-panel');
-        for(var i=0;i<these.length;i++){
-            var this_one = these[i];
-            var now = this_one.getAttribute('class');
-            this_one.setAttribute('class', now + ' hoverable');
-        }
-        </script>
-        {% endcomment %}
         {% block scripts %} {% endblock %}
     </body>
 </html>
