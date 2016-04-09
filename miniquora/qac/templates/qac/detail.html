@@ -20,7 +20,7 @@
                         <h5 class="card-panel" style="line-height:normal;margin-top:20px;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
                         {% endcomment %}
                         
-                        <h5 style="line-height:normal;margin-top:20px;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
+                        <h5 style="line-height:normal;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
                         <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
                         {% if request.user == q.created_by %}
                         <div class="row" style="margin-top: 20px;margin-bottom:10px;">
@@ -146,7 +146,7 @@
                                         {% for c in c_list %}
                                             <li class="collection-item"> 
                                                 <div class="row" style="line-height:normal; margin-bottom:10px;">
-                                                <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
+                                                <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                                 {% if c.created_by == request.user %}
                                                     <a href="{% url 'edit-comment' id=q.id a_id=a.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                                 {% else %}

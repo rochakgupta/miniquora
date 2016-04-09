@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 # Pycharm .idea folder
 .idea/*
 
+=======
+>>>>>>> f9df46f... Added the previously unadded .gitignore file
 led / optimized / DLL files
 __pycache__/
 *.py[cod]
