@@ -104,7 +104,42 @@ def edit_answer(request, id = None, a_id = None):
 
 @require_http_methods(['GET', 'POST'])
 @login_required
-def add_comment(request, id = None, a_id = None):
+def add_question_comment(request, id = None):
+    question_obj = get_object_or_404(Question, id = id)
+    if request.method == 'GET':
+        f = CommentCreateForm()
+    else:
+        f = CommentCreateForm(request.POST)
+        if f.is_valid():
+            comment_obj = f.save(commit = False)
+            comment_obj.created_by = request.user
+            comment_obj.question = question_obj
+            comment_obj.save()
+            return redirect(reverse('show-question', kwargs={'id': id }))
+        
+    return render(request, 'qac/add_question_comment.html', {'f': f, 'q_id': id})
+
+
+@require_http_methods(['GET', 'POST'])
+@login_required
+def edit_question_comment(request, id = None, c_id = None):
+    question_obj = get_object_or_404(Question, id = id)
+    comment_obj = get_object_or_404(Comment, id = c_id)
+    if comment_obj.created_by != request.user:
+        return redirect(reverse('show-question',kwargs={'id': id }))
+    if request.method == 'GET':
+        f = CommentCreateForm(instance = comment_obj)
+    else:
+        f = CommentCreateForm(request.POST, instance = comment_obj)
+        if f.is_valid():
+            comment_obj = f.save()
+            return redirect(reverse('show-question',kwargs={'id': id }))
+    return render(request, 'qac/edit_question_comment.html', {'f': f, 'q_id': id, 'c_id': c_id })
+
+
+@require_http_methods(['GET', 'POST'])
+@login_required
+def add_answer_comment(request, id = None, a_id = None):
     question_obj = get_object_or_404(Question, id = id)
     answer_obj = get_object_or_404(Answer, id = a_id)
     if request.method == 'GET':
@@ -118,25 +153,25 @@ def add_comment(request, id = None, a_id = None):
             comment_obj.save()
             return redirect(reverse('show-question', kwargs={'id': id }))
         
-    return render(request, 'qac/add_comment.html', {'f': f, 'q_id': id, 'ans_id': a_id})
+    return render(request, 'qac/add_answer_comment.html', {'f': f, 'q_id': id, 'a_id': a_id})
 
 
 @require_http_methods(['GET', 'POST'])
 @login_required
-def edit_comment(request, id = None, a_id = None, c_id = None):
+def edit_answer_comment(request, id = None, a_id = None, c_id = None):
     question_obj = get_object_or_404(Question, id = id)
     answer_obj = get_object_or_404(Answer, id = a_id)
     comment_obj = get_object_or_404(Comment, id = c_id)
     if comment_obj.created_by != request.user:
         return redirect(reverse('show-question',kwargs={'id': id }))
     if request.method == 'GET':
-        f = CommentCreateForm(instance = answer_obj)
+        f = CommentCreateForm(instance = comment_obj)
     else:
         f = CommentCreateForm(request.POST, instance = comment_obj)
         if f.is_valid():
             comment_obj = f.save()
             return redirect(reverse('show-question',kwargs={'id': id }))
-    return render(request, 'qac/edit_comment.html', {'f': f, 'q_id': id, 'a_id': a_id, 'c_id': c_id })
+    return render(request, 'qac/edit_answer_comment.html', {'f': f, 'q_id': id, 'a_id': a_id, 'c_id': c_id })
 
 
 @require_GET

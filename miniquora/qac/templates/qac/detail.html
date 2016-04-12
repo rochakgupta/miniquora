@@ -46,6 +46,34 @@
                             </div>
                             {% endif %}
                         {% endif %}
+       
+                        {% with c_list=q.comments.all %}
+                        {% if c_list %}
+                        <div class="card-title center" style="color:teal;">
+                            <h6 class="c_head">Comments</h6>
+                        </div>
+                        <ul class="collection" style="margin-bottom:0;">
+                            {% for c in c_list %}
+                                <li class="collection-item"> 
+                                    <div class="row" style="line-height:normal; margin-bottom:10px;">
+                                    <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
+                                    {% if c.created_by == request.user %}
+                                        <a href="{% url 'edit-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                    {% else %}
+                                        <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
+                                    {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
+                        <div class="row center" style="margin-bottom:10px;margin-top:20px;">
+                        <div class="col s12">
+                            <a href="{% url 'add-question-comment' id=q.id %}" class="btn waves-effect waves-light">Comment</a>
+                        </div>
+                        </div>
+                        
                     </div>
                 </div>        
             </div>
@@ -80,7 +108,7 @@
                                             <div class="row" style="line-height:normal; margin-bottom:10px;">
                                             <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
                                             {% if c.created_by == request.user %}
-                                                <a href="{% url 'edit-comment' id=q.id a_id=a_user.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                <a href="{% url 'edit-answer-comment' id=q.id a_id=a_user.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                             {% else %}
                                                 <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
                                             {% endif %}
@@ -94,7 +122,7 @@
                         </div>
                         <div class="row center" style="margin-bottom:10px;">
                             <div class="col s12">
-                                <a href="{% url 'add-comment' id=q.id a_id=a_user.id %}" class="btn waves-effect waves-light">Comment</a>
+                                <a href="{% url 'add-answer-comment' id=q.id a_id=a_user.id %}" class="btn waves-effect waves-light">Comment</a>
                             </div>
                         </div>
                     </div>
@@ -148,7 +176,7 @@
                                                 <div class="row" style="line-height:normal; margin-bottom:10px;">
                                                 <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                                 {% if c.created_by == request.user %}
-                                                    <a href="{% url 'edit-comment' id=q.id a_id=a.id c_id=c.created_by.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                    <a href="{% url 'edit-answer-comment' id=q.id a_id=a.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                                 {% else %}
                                                     <p class="right" style="margin-right:10px;">{{ c.created_by }}</p>
                                                 {% endif %}
@@ -162,7 +190,7 @@
                             </div>
                             <div class="row center" style="margin-bottom:10px;">
                                 <div class="col s12">
-                                    <a href="{% url 'add-comment' id=q.id a_id=a.id %}" class="btn waves-effect waves-light">Comment</a>
+                                    <a href="{% url 'add-answer-comment' id=q.id a_id=a.id %}" class="btn waves-effect waves-light">Comment</a>
                                 </div>
                             </div>
                         </div>

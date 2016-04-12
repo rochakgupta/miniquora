@@ -30,7 +30,8 @@ class Comment(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(MyUser, on_delete = models.CASCADE, related_name='comments_created')
     upvoted_by = models.ManyToManyField(MyUser, related_name='comments_upvoted', blank=True)
-    answer = models.ForeignKey(Answer, on_delete = models.CASCADE, related_name='comments')
+    answer = models.ForeignKey(Answer, on_delete = models.CASCADE, related_name='comments',null=True, default=None)
+    question = models.ForeignKey(Question, on_delete = models.CASCADE, related_name='comments',null=True, default=None)
     
     def __str__(self):
         return self.text
