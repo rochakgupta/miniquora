@@ -15,7 +15,7 @@ from django.db.models import Q
 @csrf_exempt
 def all_questions(request, page_num = 1):
     questions = Question.objects.all().order_by('-created_on')
-    p = Paginator(questions, 4)
+    p = Paginator(questions, 10)
     current_page = p.page(page_num)
     return render(request, 'qac/index.html', { 'q_list': current_page.object_list, 'page':current_page })
 
