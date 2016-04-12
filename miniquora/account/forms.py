@@ -87,6 +87,7 @@ class ProfileForm(forms.ModelForm):
         Row('email'),
         Row(Span6('first_name'), Span6('last_name')),
         Row(Span2('gender'), Span4('dob'), Span6('phone')),
+        Row('profile_pic'),
         Row('old_password', 'new_password')
     )
     def __init__(self, *args, **kwargs):
@@ -132,4 +133,4 @@ class ProfileForm(forms.ModelForm):
     
     class Meta:
         model = MyUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'gender', 'dob', 'phone']
+        fields = ['username', 'email', 'first_name', 'last_name', 'profile_pic', 'gender', 'dob', 'phone']

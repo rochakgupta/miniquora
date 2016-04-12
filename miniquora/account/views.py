@@ -142,7 +142,7 @@ def edit_profile(request, id=None ):
     if request.method == 'GET':
         f = ProfileForm(instance = request.user)
     else:
-        f = ProfileForm(request.POST, instance = request.user)
+        f = ProfileForm(request.POST, request.FILES, instance = request.user)
         if f.is_valid():
             user = f.save(commit = False)
             if f.cleaned_data['new_password']:
