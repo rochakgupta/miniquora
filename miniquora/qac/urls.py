@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^(?P<id>\d+)/comment/(?P<c_id>\d+)/edit/$', edit_question_comment, name="edit-question-comment"),
     url(r'^(?P<id>\d+)/answer/add/$', add_answer, name="add-answer"),
     url(r'^(?P<id>\d+)/answer/(?P<a_id>\d+)/edit/$', edit_answer, name="edit-answer"),
+    url(r'^(?P<id>\d+)/answer/(?P<a_id>\d+)/load_vote/$', load_vote_answer, name="load-vote-answer"),
+    url(r'^(?P<id>\d+)/answer/(?P<a_id>\d+)/vote/$', vote_answer, name="vote-answer"),
     url(r'^(?P<id>\d+)/answer/(?P<a_id>\d+)/comment/add/$', add_answer_comment, name="add-answer-comment"),
     url(r'^(?P<id>\d+)/answer/(?P<a_id>\d+)/comment/(?P<c_id>\d+)/edit/$', edit_answer_comment, name="edit-answer-comment")
 ]

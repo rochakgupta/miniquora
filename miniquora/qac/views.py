@@ -9,6 +9,7 @@ from .models import Question, Answer, Comment
 from .forms import QuestionCreateForm, AnswerCreateForm, CommentCreateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+import json
 
 # Create your views here.
 @csrf_exempt
@@ -31,7 +32,23 @@ def show_question(request, id = None):
         a_list = question_obj.answers.exclude(created_by=request.user).order_by('-created_on')
     else:
         a_list = question_obj.answers.all().order_by('-created_on')
-    context = { 'q': question_obj, 'a_list': a_list, 'a_user': user_answer, 'net_votes': question_obj.upvoted_by.count() - question_obj.downvoted_by.count() }
+    
+    question_obj.votes = question_obj.upvoted_by.count() - question_obj.downvoted_by.count()
+    question_obj.load_vote_url = reverse('load-vote-question',kwargs={'id': id })
+    question_obj.vote_url = reverse('vote-question',kwargs={'id': id })
+    
+    if user_answer:
+        user_answer.votes = user_answer.upvoted_by.count() - user_answer.downvoted_by.count()
+    for a in a_list:
+        a.votes = a.upvoted_by.count() - a.downvoted_by.count()
+    
+    context = { 'q': question_obj, 'a_list': a_list, 'a_user': user_answer }
+    
+    a_list_json = []
+    for a in a_list:
+        a_list_json.append({'id': a.id, 'load_vote_url': reverse('load-vote-answer',kwargs={'id': id, 'a_id': a.id }), 'vote_url': reverse('vote-answer',kwargs={'id': id, 'a_id': a.id }) })
+    
+    context['a_list_json'] = json.dumps(a_list_json) 
     return render(request, 'qac/detail.html', context)
     
 
@@ -215,6 +232,41 @@ def vote_question(request, id=None):
             return JsonResponse({'result': -1})
         elif switch == 'n':
             question_obj.downvoted_by.remove(request.user)
+            return JsonResponse({'result': 1})
+    return JsonResponse({'result': 0})
+
+
+@require_GET
+@login_required
+def load_vote_answer(request, id=None, a_id=None):
+    if request.user.answers_upvoted.filter(id=a_id):
+        return JsonResponse({'result':'up'})
+    elif request.user.answers_downvoted.filter(id=a_id):
+        return JsonResponse({'result':'down'})
+    return JsonResponse({'result':'none'})
+
+
+@require_GET
+@login_required
+def vote_answer(request, id=None, a_id=None):
+    question_obj = get_object_or_404(Question, id = id)
+    answer_obj = get_object_or_404(Answer, id = a_id)
+    di = request.GET.get('dir','')
+    if di == 'up':
+        switch = request.GET.get('switch','')
+        if switch == 'y':
+            answer_obj.upvoted_by.add(request.user)
+            return JsonResponse({'result': 1})
+        elif switch == 'n':
+            answer_obj.upvoted_by.remove(request.user)
+            return JsonResponse({'result': -1})
+    elif di == 'down':
+        switch = request.GET.get('switch','')
+        if switch == 'y':
+            answer_obj.downvoted_by.add(request.user)
+            return JsonResponse({'result': -1})
+        elif switch == 'n':
+            answer_obj.downvoted_by.remove(request.user)
             return JsonResponse({'result': 1})
     return JsonResponse({'result': 0})
             
