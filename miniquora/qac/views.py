@@ -10,7 +10,6 @@ from .forms import QuestionCreateForm, AnswerCreateForm, CommentCreateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-
 # Create your views here.
 @csrf_exempt
 def all_questions(request, page_num = 1):
@@ -32,7 +31,7 @@ def show_question(request, id = None):
         a_list = question_obj.answers.exclude(created_by=request.user).order_by('-created_on')
     else:
         a_list = question_obj.answers.all().order_by('-created_on')
-    context = { 'q': question_obj, 'a_list': a_list, 'a_user': user_answer }
+    context = { 'q': question_obj, 'a_list': a_list, 'a_user': user_answer, 'net_votes': question_obj.upvoted_by.count() - question_obj.downvoted_by.count() }
     return render(request, 'qac/detail.html', context)
     
 
@@ -185,4 +184,39 @@ def search_questions(request):
     ).order_by('-created_on')
     data['questions'] = [{'id' : q.id, 'title' : q.title , 'created_by' : q.created_by.username } for q in questions]
     return JsonResponse(data)
+
+@require_GET
+@login_required
+def load_vote_question(request, id=None):
+    if request.user.questions_upvoted.filter(id=id):
+        return JsonResponse({'result':'up'})
+    elif request.user.questions_downvoted.filter(id=id):
+        return JsonResponse({'result':'down'})
+    return JsonResponse({'result':'none'})
+
+
+@require_GET
+@login_required
+def vote_question(request, id=None):
+    question_obj = get_object_or_404(Question, id = id)
+    di = request.GET.get('dir','')
+    if di == 'up':
+        switch = request.GET.get('switch','')
+        if switch == 'y':
+            question_obj.upvoted_by.add(request.user)
+            return JsonResponse({'result': 1})
+        elif switch == 'n':
+            question_obj.upvoted_by.remove(request.user)
+            return JsonResponse({'result': -1})
+    elif di == 'down':
+        switch = request.GET.get('switch','')
+        if switch == 'y':
+            question_obj.downvoted_by.add(request.user)
+            return JsonResponse({'result': -1})
+        elif switch == 'n':
+            question_obj.downvoted_by.remove(request.user)
+            return JsonResponse({'result': 1})
+    return JsonResponse({'result': 0})
+            
+            
 

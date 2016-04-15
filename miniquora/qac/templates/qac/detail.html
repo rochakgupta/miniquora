@@ -15,65 +15,73 @@
                 </div>
                 <div class="collection" style="margin-top:20px;">
                     <div class="collection-item">
-                        
-                        {% comment %}
-                        <h5 class="card-panel" style="line-height:normal;margin-top:20px;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
-                        {% endcomment %}
-                        
-                        <h5 style="line-height:normal;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
-                        <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
-                        {% if request.user == q.created_by %}
-                        <div class="row" style="margin-top: 20px;margin-bottom:10px;">
-                            <div class="col s12">
-                                <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
-                            </div>
-                        </div>
-                        {% else %}
-                            {% if not a_user %}
-                            <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
-                                <div class="col s6">
-                                    <a href="{% url 'add-answer' id=q.id %}" class="btn waves-effect waves-light left">Answer</a>
+                        <div class="row valign-wrapper" style="margin-bottom:0;">
+                            <div class="col s1" style="margin:10 0 0 0; padding:0; align-self:flex-start; width:45px;">
+                                <div class="btn-small vote-up">
                                 </div>
-                                <div class="col s6">
-                                    <p class="right">{{ q.created_by }}</p>
+                                <div class="vote-count">
+                                {{ net_votes }}
+                                </div>
+                                <div class="btn-small vote-down">
                                 </div>
                             </div>
-                            {% else %}
-                            <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
-                                <div class="col s12">
-                                    <p class="right">{{ q.created_by }}</p>
-                                </div>
-                            </div>
-                            {% endif %}
-                        {% endif %}
-       
-                        {% with c_list=q.comments.all %}
-                        {% if c_list %}
-                        <div class="card-title center" style="color:teal;">
-                            <h6 class="c_head">Comments</h6>
-                        </div>
-                        <ul class="collection" style="margin-bottom:0;">
-                            {% for c in c_list %}
-                                <li class="collection-item"> 
-                                    <div class="row" style="line-height:normal; margin-bottom:10px;">
-                                    <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
-                                    {% if c.created_by == request.user %}
-                                        <a href="{% url 'edit-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
-                                    {% else %}
-                                        <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
-                                    {% endif %}
+                            <div class="col s11 offset-s1" style="margin-left:0px;width:calc(100% - 45px);">
+
+                                <h5 style="line-height:normal;margin-bottom:20px;"><span class="q_title">{{ q.title }}</span></h5>
+                                <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
+                                {% if request.user == q.created_by %}
+                                <div class="row" style="margin-top: 20px;margin-bottom:10px;">
+                                    <div class="col s12">
+                                        <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
                                     </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                        {% endwith %}
-                        <div class="row center" style="margin-bottom:10px;margin-top:20px;">
-                        <div class="col s12">
-                            <a href="{% url 'add-question-comment' id=q.id %}" class="btn waves-effect waves-light">Comment</a>
+                                </div>
+                                {% else %}
+                                    {% if not a_user %}
+                                    <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
+                                        <div class="col s6">
+                                            <a href="{% url 'add-answer' id=q.id %}" class="btn waves-effect waves-light left">Answer</a>
+                                        </div>
+                                        <div class="col s6">
+                                            <p class="right">{{ q.created_by }}</p>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
+                                        <div class="col s12">
+                                            <p class="right">{{ q.created_by }}</p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% with c_list=q.comments.all %}
+                                {% if c_list %}
+                                <div class="card-title center" style="color:teal;">
+                                    <h6 class="c_head">Comments</h6>
+                                </div>
+                                <ul class="collection" style="margin-bottom:0;">
+                                    {% for c in c_list %}
+                                        <li class="collection-item"> 
+                                            <div class="row" style="line-height:normal; margin-bottom:10px;">
+                                            <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
+                                            {% if c.created_by == request.user %}
+                                                <a href="{% url 'edit-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                            {% else %}
+                                                <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
+                                            {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                {% endwith %}
+                                <div class="row center" style="margin-bottom:10px;margin-top:20px;">
+                                    <div class="col s12">
+                                        <a href="{% url 'add-question-comment' id=q.id %}" class="btn waves-effect waves-light">Comment</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                        
                     </div>
                 </div>        
             </div>
@@ -106,7 +114,7 @@
                                     {% for c in c_list %}
                                         <li class="collection-item"> 
                                             <div class="row" style="line-height:normal; margin-bottom:10px;">
-                                            <span class="col s12 c_text" style="margin-bottom:10px;">{{ c.text }}</span>
+                                            <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                             {% if c.created_by == request.user %}
                                                 <a href="{% url 'edit-answer-comment' id=q.id a_id=a_user.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
                                             {% else %}
@@ -201,4 +209,138 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+QVote = (function(){
+
+    var vote_up,vote_down,is_authenticated,vote_count;
+    
+    function toggle_vote_up(on, count, bool){
+        $.ajax({
+            url: "{% url 'vote-question' id=q.id %}",
+            data: {
+                'dir': 'up',
+                'switch': on,
+            },
+            type: 'GET',
+            success: function (data, status, xhr) {
+                vote_up.toggleClass('on');
+                if(!bool && on === 'y' && vote_down.hasClass('on')){
+                    toggle_vote_down('n', data['result'], true);
+                }
+                else{
+                    var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
+                    vote_count.html(x.toString());
+                }
+            },
+            error: function (jqXHR, exception) {
+                console.log('Upvote error');
+                Materialize.toast('Some error occurred', 1500);
+                return 0;
+            }
+        });    
+    }
+    
+    function toggle_vote_down(on, count, bool){
+        $.ajax({
+            url: "{% url 'vote-question' id=q.id %}",
+            data: {
+                'dir': 'down',
+                'switch': on,
+            },
+            type: 'GET',
+            success: function (data, status, xhr) {
+                vote_down.toggleClass('on');
+                if(!bool && on === 'y' && vote_up.hasClass('on')){
+                    toggle_vote_up('n', data['result'], true);
+                }
+                else{
+                    var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
+                    vote_count.html(x.toString());
+                }
+            },
+            error: function (jqXHR, exception) {
+                console.log('Downvote error');
+                Materialize.toast('Some error occurred', 1500);
+                return 0;
+            }
+        });    
+    }
+    
+    function init(){
+        is_authenticated = '{{ request.user.is_authenticated }}';
+        vote_up = $('.vote-up');
+        vote_down = $('.vote-down');
+        vote_count = $('.vote-count');
+        
+        if(is_authenticated === 'True') {
+            $.ajax({
+                url: "{% url 'load-vote-question' id=q.id %}",
+                data: {
+                    'type': 'Q',
+                },
+                type: 'GET',
+                success: function (data, status, xhr) {
+                    
+                    if(data['result'] === 'up'){
+                        vote_up.addClass('on');
+                    }
+                    else if(data['result'] === 'down'){
+                        vote_down.addClass('on');
+                    }
+                    
+                    vote_up.click(function () {
+                        if(vote_up.hasClass('on')){
+                            toggle_vote_up('n', 0, false);
+                        }
+                        else{
+                            toggle_vote_up('y', 0, false);
+                        }
+                    });
+                    vote_down.click(function () {
+                        if(vote_down.hasClass('on')){
+                            toggle_vote_down('n', 0, false);
+                        }
+                        else{
+                            toggle_vote_down('y', 0, false);
+                        }
+                    });
+                    
+                },
+                error: function (jqXHR, exception) {
+                    
+                    console.log('Vote load error');
+                    vote_up.click(function(){
+                        Materialize.toast('Some error occurred', 1500);
+                    });
+                    vote_down.click(function(){
+                        Materialize.toast('Some error occurred', 1500);
+                    });                    
+                }
+            });    
+        }
+        else {
+            vote_up.click(function(){
+                Materialize.toast('You must login to upvote', 1500);
+//                 window.location = "{% url 'login' %}?next={{ request.META.PATH_INFO }}";
+            });
+            vote_down.click(function(){
+                Materialize.toast('You must login to downvote', 1500);
+//                window.location = "{% url 'login' %}?next={{ request.META.PATH_INFO }}";
+            });
+        }
+    }
+    
+    return {
+        init: init
+    }
+})();
+
+$(document).ready(function () {
+    QVote.init();
+});
+</script>
 {% endblock %}
