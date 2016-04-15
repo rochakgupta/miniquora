@@ -216,7 +216,7 @@
 
 QVote = (function(){
 
-    var vote_up,vote_down,is_authenticated,vote_count;
+    var vote_up,vote_down,is_authenticated,vote_count,request_user,question_creator;
     
     function toggle_vote_up(on, count, bool){
         $.ajax({
@@ -227,13 +227,15 @@ QVote = (function(){
             },
             type: 'GET',
             success: function (data, status, xhr) {
-                vote_up.toggleClass('on');
-                if(!bool && on === 'y' && vote_down.hasClass('on')){
-                    toggle_vote_down('n', data['result'], true);
-                }
-                else{
-                    var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
-                    vote_count.html(x.toString());
+                if(data['result'] !== 0){
+                    vote_up.toggleClass('on');
+                    if(!bool && on === 'y' && vote_down.hasClass('on')){
+                        toggle_vote_down('n', data['result'], true);
+                    }
+                    else{
+                        var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
+                        vote_count.html(x.toString());
+                    }
                 }
             },
             error: function (jqXHR, exception) {
@@ -253,13 +255,15 @@ QVote = (function(){
             },
             type: 'GET',
             success: function (data, status, xhr) {
-                vote_down.toggleClass('on');
-                if(!bool && on === 'y' && vote_up.hasClass('on')){
-                    toggle_vote_up('n', data['result'], true);
-                }
-                else{
-                    var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
-                    vote_count.html(x.toString());
+                if(data['result'] !== 0){
+                    vote_down.toggleClass('on');
+                    if(!bool && on === 'y' && vote_up.hasClass('on')){
+                        toggle_vote_up('n', data['result'], true);
+                    }
+                    else{
+                        var x = parseInt(vote_count.html().trim(),10) + count + data['result'];
+                        vote_count.html(x.toString());
+                    }
                 }
             },
             error: function (jqXHR, exception) {
@@ -275,52 +279,61 @@ QVote = (function(){
         vote_up = $('.vote-up');
         vote_down = $('.vote-down');
         vote_count = $('.vote-count');
+        request_user = '{{ request.user }}';
+        question_creator = '{{ q.created_by }}';
         
         if(is_authenticated === 'True') {
-            $.ajax({
-                url: "{% url 'load-vote-question' id=q.id %}",
-                data: {
-                    'type': 'Q',
-                },
-                type: 'GET',
-                success: function (data, status, xhr) {
-                    
-                    if(data['result'] === 'up'){
-                        vote_up.addClass('on');
+            if(request_user !== question_creator){
+                $.ajax({
+                    url: "{% url 'load-vote-question' id=q.id %}",
+                    type: 'GET',
+                    success: function (data, status, xhr) {
+
+                        if(data['result'] === 'up'){
+                            vote_up.addClass('on');
+                        }
+                        else if(data['result'] === 'down'){
+                            vote_down.addClass('on');
+                        }
+
+                        vote_up.click(function () {
+                            if(vote_up.hasClass('on')){
+                                toggle_vote_up('n', 0, false);
+                            }
+                            else{
+                                toggle_vote_up('y', 0, false);
+                            }
+                        });
+                        vote_down.click(function () {
+                            if(vote_down.hasClass('on')){
+                                toggle_vote_down('n', 0, false);
+                            }
+                            else{
+                                toggle_vote_down('y', 0, false);
+                            }
+                        });
+
+                    },
+                    error: function (jqXHR, exception) {
+
+                        console.log('Vote load error');
+                        vote_up.click(function(){
+                            Materialize.toast('Some error occurred', 1500);
+                        });
+                        vote_down.click(function(){
+                            Materialize.toast('Some error occurred', 1500);
+                        });                    
                     }
-                    else if(data['result'] === 'down'){
-                        vote_down.addClass('on');
-                    }
-                    
-                    vote_up.click(function () {
-                        if(vote_up.hasClass('on')){
-                            toggle_vote_up('n', 0, false);
-                        }
-                        else{
-                            toggle_vote_up('y', 0, false);
-                        }
-                    });
-                    vote_down.click(function () {
-                        if(vote_down.hasClass('on')){
-                            toggle_vote_down('n', 0, false);
-                        }
-                        else{
-                            toggle_vote_down('y', 0, false);
-                        }
-                    });
-                    
-                },
-                error: function (jqXHR, exception) {
-                    
-                    console.log('Vote load error');
-                    vote_up.click(function(){
-                        Materialize.toast('Some error occurred', 1500);
-                    });
-                    vote_down.click(function(){
-                        Materialize.toast('Some error occurred', 1500);
-                    });                    
-                }
-            });    
+                });    
+            }
+            else{
+                vote_up.click(function(){
+                    Materialize.toast('You cannot upvote your own question', 1500);
+                });
+                vote_down.click(function(){
+                    Materialize.toast('You cannot downvote your own question', 1500);
+                });   
+            }
         }
         else {
             vote_up.click(function(){

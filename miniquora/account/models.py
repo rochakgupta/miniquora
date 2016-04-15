@@ -18,7 +18,7 @@ class MyUser(AbstractUser):
     
     class Meta:
         unique_together = ('email',)
-        
+        verbose_name = 'User'
 
 def create_otp(user = None, purpose = None):
     if not user:
