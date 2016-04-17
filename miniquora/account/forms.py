@@ -3,6 +3,7 @@ from .models import MyUser
 from django.contrib.auth import authenticate
 from material import *
 
+
 class LoginForm(forms.Form):
     username = forms.CharField(max_length = 25)
     password = forms.CharField(widget = forms.PasswordInput)
@@ -28,6 +29,7 @@ class LoginForm(forms.Form):
         self.authenticated_user = user
         return self.cleaned_data
 
+
 class ForgotPassword(forms.Form):
     username = forms.CharField(max_length = 25)
 
@@ -48,6 +50,7 @@ class SetPasswordForm(forms.Form):
                 and data_new_password != data_confirm_password):
             raise forms.ValidationError("The two passwords field didn't match")
         return data_confirm_password
+
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget = forms.PasswordInput)
@@ -90,6 +93,7 @@ class ProfileForm(forms.ModelForm):
         Row('profile_pic'),
         Row('old_password', 'new_password')
     )
+
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = True

@@ -32,25 +32,25 @@ def show_question(request, id = None):
         a_list = question_obj.answers.exclude(created_by=request.user).order_by('-created_on')
     else:
         a_list = question_obj.answers.all().order_by('-created_on')
-    
+
     question_obj.votes = question_obj.upvoted_by.count() - question_obj.downvoted_by.count()
     question_obj.load_vote_url = reverse('load-vote-question',kwargs={'id': id })
     question_obj.vote_url = reverse('vote-question',kwargs={'id': id })
-    
+
     if user_answer:
         user_answer.votes = user_answer.upvoted_by.count() - user_answer.downvoted_by.count()
     for a in a_list:
         a.votes = a.upvoted_by.count() - a.downvoted_by.count()
-    
+
     context = { 'q': question_obj, 'a_list': a_list, 'a_user': user_answer }
-    
+
     a_list_json = []
     for a in a_list:
         a_list_json.append({'id': a.id, 'load_vote_url': reverse('load-vote-answer',kwargs={'id': id, 'a_id': a.id }), 'vote_url': reverse('vote-answer',kwargs={'id': id, 'a_id': a.id }) })
-    
-    context['a_list_json'] = json.dumps(a_list_json) 
+
+    context['a_list_json'] = json.dumps(a_list_json)
     return render(request, 'qac/detail.html', context)
-    
+
 
 @require_http_methods(['GET', 'POST'])
 @login_required
@@ -97,7 +97,7 @@ def add_answer(request, id = None):
             answer_obj.created_by = request.user
             answer_obj.question = question_obj
             answer_obj.save()
-            return redirect(reverse('show-question',kwargs={'id': id }))     
+            return redirect(reverse('show-question',kwargs={'id': id }))
     return render(request, 'qac/add_answer.html', {'f': f, 'q_id': id})
 
 
@@ -132,7 +132,7 @@ def add_question_comment(request, id = None):
             comment_obj.question = question_obj
             comment_obj.save()
             return redirect(reverse('show-question', kwargs={'id': id }))
-        
+
     return render(request, 'qac/add_question_comment.html', {'f': f, 'q_id': id})
 
 
@@ -168,7 +168,7 @@ def add_answer_comment(request, id = None, a_id = None):
             comment_obj.answer = answer_obj
             comment_obj.save()
             return redirect(reverse('show-question', kwargs={'id': id }))
-        
+
     return render(request, 'qac/add_answer_comment.html', {'f': f, 'q_id': id, 'a_id': a_id})
 
 
@@ -269,9 +269,9 @@ def vote_answer(request, id=None, a_id=None):
             answer_obj.downvoted_by.remove(request.user)
             return JsonResponse({'result': 1})
     return JsonResponse({'result': 0})
-            
 
-    
+
+
 @login_required
 def delete_question(request, id = None):
     question_obj = get_object_or_404(Question, id = id)
@@ -307,5 +307,5 @@ def delete_question_comment(request, id = None, c_id = None):
     if comment_obj.created_by == request.user:
         comment_obj.delete()
     return redirect(reverse('show-question',kwargs={'id': id }))
-            
+
 
