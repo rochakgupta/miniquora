@@ -66,7 +66,8 @@
                                             <div class="row" style="line-height:normal; margin-bottom:10px;">
                                             <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                             {% if c.created_by == request.user %}
-                                                <a href="{% url 'edit-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                <a href="{% url 'delete-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right comment" style="margin-right:10px;">Delete</a>
+                                                <a href="{% url 'edit-question-comment' id=q.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:20px;">Edit</a>
                                             {% else %}
                                                 <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
                                             {% endif %}
@@ -132,7 +133,8 @@
                                                     <div class="row" style="line-height:normal; margin-bottom:10px;">
                                                     <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                                     {% if c.created_by == request.user %}
-                                                        <a href="{% url 'edit-answer-comment' id=q.id a_id=a_user.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                        <a href="{% url 'delete-answer-comment' id=q.id a_id=a_user.id c_id=c.id %}" class="btn waves-effect waves-light right comment" style="margin-right:10px;">Delete</a>
+                                                        <a href="{% url 'edit-answer-comment' id=q.id a_id=a_user.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:20px;">Edit</a>
                                                     {% else %}
                                                         <p class="right" style="margin-right:10px;margin-bottom:5px;">{{ c.created_by }}</p>
                                                     {% endif %}
@@ -217,7 +219,8 @@
                                                         <div class="row" style="line-height:normal; margin-bottom:10px;">
                                                         <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                                         {% if c.created_by == request.user %}
-                                                            <a href="{% url 'edit-answer-comment' id=q.id a_id=a.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:10px;">Edit</a>
+                                                            <a href="{% url 'delete-answer-comment' id=q.id a_id=a.id c_id=c.id %}" class="btn waves-effect waves-light right comment" style="margin-right:10px;">Delete</a>
+                                                            <a href="{% url 'edit-answer-comment' id=q.id a_id=a.id c_id=c.id %}" class="btn waves-effect waves-light right" style="margin-right:20px;">Edit</a>
                                                         {% else %}
                                                             <p class="right" style="margin-right:10px;">{{ c.created_by }}</p>
                                                         {% endif %}
@@ -534,12 +537,51 @@ AVote = (function(){
     }
 })();
     
+
+CDelete = (function(){
     
+    function deleteComment(e){
+        e.preventDefault();
+        var div = document.createElement('div');
+        div.setAttribute('id','comment-delete');
+        div.innerHTML = '<div class="col s10 m6 offset-s1-m3 card-panel" style="margin:0;">' + 
+                             '<div class="row valign-wrapper">Do you really want to delete this comment?' +
+                             '</div>' +
+                             '<div class="row center valign-wrapper" style="margin:0;">' +
+                                '<div class="col s6">' +
+                                    '<a class="btn waves-effect waves-light" href="' + this['href'] + '">Yes</a>' +
+                                '</div>' +
+                                '<div class="col s6">' +
+                                    '<a class="btn waves-effect waves-light" href="#" id="no-comment-delete">No</a>' +
+                                '</div>' +
+                             '</div>' +
+                        '</div>';
+        document.body.appendChild(div);
+        $('#no-comment-delete').on('click',function(event){
+            event.preventDefault();
+            $('#comment-delete').remove();
+        })
+    }
+    
+    function init(){
+        if('{{ request.user.is_authenticated }}' === 'True'){
+            var a_tags = document.querySelectorAll('.comment');
+            for(var i=0;i<a_tags.length;i++){
+                a_tags[i].addEventListener('click', deleteComment);
+            }
+        }
+    }
+    
+    return {
+        init: init
+    }
+})();
 
 $(document).ready(function () {
     QVote.init();
     UAVote.init();
     AVote.init({{ a_list_json|safe}});
+    CDelete.init();
 });
 </script>
 {% endblock %}

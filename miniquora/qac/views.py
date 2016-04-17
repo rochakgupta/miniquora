@@ -270,5 +270,23 @@ def vote_answer(request, id=None, a_id=None):
             return JsonResponse({'result': 1})
     return JsonResponse({'result': 0})
             
+
+@login_required
+def delete_answer_comment(request, id = None, a_id = None, c_id = None):
+    question_obj = get_object_or_404(Question, id = id)
+    answer_obj = get_object_or_404(Answer, id = a_id)
+    comment_obj = get_object_or_404(Comment, id = c_id)
+    if comment_obj.created_by == request.user:
+        comment_obj.delete()
+    return redirect(reverse('show-question',kwargs={'id': id }))
+
+
+@login_required
+def delete_question_comment(request, id = None, c_id = None):
+    question_obj = get_object_or_404(Question, id = id)
+    comment_obj = get_object_or_404(Comment, id = c_id)
+    if comment_obj.created_by == request.user:
+        comment_obj.delete()
+    return redirect(reverse('show-question',kwargs={'id': id }))
             
 
