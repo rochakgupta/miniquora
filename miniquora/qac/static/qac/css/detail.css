@@ -52,10 +52,12 @@
     font-weight: 300;
 }
 
+/*
 .btn {
     font-size: 0.8rem;
     padding: 0 1rem;
 }
+*/
 
 .vote-up {
     display: inline-block;
@@ -90,7 +92,9 @@
     background-position: -37.5px 33px;
 }
 
-#comment-delete {
+#comment-delete,
+#answer-delete,
+#question-delete {
     width: 100vw;
     height: 100vh;
     background-color: rgba(1, 1, 1, 0.7);

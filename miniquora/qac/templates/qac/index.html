@@ -28,7 +28,8 @@
                             {% if request.user == q.created_by %}
                             <div class="row" style="margin-top: 10px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
+                                    <a href="{% url 'delete-question' id=q.id %}" class="btn-small waves-effect waves-light right" id="user-question-delete">Delete</a>
+                                    <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right" style="margin-right:20px;">Edit</a>
                                 </div>
                             </div>
                             {% else %}
@@ -44,10 +45,10 @@
                 {% if page.has_previous or page.has_next %}
                 <div class="row" style="margin-top:20px;margin-bottom:0px;">
                     {% if page.has_previous %}
-                    <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'all-questions-page' page_num=page.previous_page_number %}">Previous</a>
+                    <a class="btn-small waves-effect waves-light left" style="margin-left:10px;" href="{% url 'all-questions-page' page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
                     {% if page.has_next %}
-                    <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'all-questions-page' page_num=page.next_page_number %}">Next</a>
+                    <a class="btn-small waves-effect waves-light right" style="margin-right:10px;" href="{% url 'all-questions-page' page_num=page.next_page_number %}">Next</a>
                     {% endif %}
                 </div>
                 {% endif %}
@@ -59,8 +60,8 @@
 {% endblock %}
 
 {% block other %}
-<div class="fixed-action-btn" style="bottom: 40px; right: 40px;">
-    <a class="btn-floating btn-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
+<div class="fixed-action-btn-small" style="bottom: 40px; right: 40px;">
+    <a class="btn-small-floating btn-small-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
 </div>
 {% endblock %}
         
@@ -113,7 +114,7 @@ QSearch = (function () {
                 inner = inner +
                             '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
                                 '<div class="col s12">' +
-                                    '<a href="/question/' + questions[i].id + '/edit/" class="btn waves-effect waves-light right">Edit</a>' +
+                                    '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right">Edit</a>' +
                                 '</div>' +
                             '</div>';
             } else {
@@ -186,9 +187,47 @@ QSearch = (function () {
         init: init
     };
 })();
+    
+    
+QDelete = (function(){
+    
+    function deleteQuestion(e){
+        e.preventDefault();
+        var div = document.createElement('div');
+        div.setAttribute('id','question-delete');
+        div.innerHTML = '<div class="col s10 m6 offset-s1-m3 card-panel" style="margin:0;">' + 
+                             '<div class="row valign-wrapper">Do you really want to delete your question?' +
+                             '</div>' +
+                             '<div class="row center valign-wrapper" style="margin:0;">' +
+                                '<div class="col s6">' +
+                                    '<a class="btn-small waves-effect waves-light" href="' + this['href'] + '">Yes</a>' +
+                                '</div>' +
+                                '<div class="col s6">' +
+                                    '<a class="btn-small waves-effect waves-light" href="#" id="no-question-delete">No</a>' +
+                                '</div>' +
+                             '</div>' +
+                        '</div>';
+        document.body.appendChild(div);
+        $('#no-question-delete').on('click',function(event){
+            event.preventDefault();
+            $('#question-delete').remove();
+        })
+    }
+    
+    function init(){
+        if('{{ request.user.is_authenticated }}' === 'True' && '{{ request.user }}' === '{{ q.created_by }}'){
+            document.getElementById('user-question-delete').addEventListener('click', deleteQuestion);
+        }
+    }
+    
+    return {
+        init: init
+    }
+})();
 
 $(document).ready(function () {
     QSearch.init();
+    QDelete.init();
 });
 </script>
 {% endblock %}

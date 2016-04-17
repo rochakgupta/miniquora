@@ -26,7 +26,7 @@
                             </div>
                             <div class="row" style="margin-top: 10px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
+                                    <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right">Edit</a>
                                 </div>
                             </div>
                             {% endcomment %}
@@ -35,7 +35,7 @@
                             <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
                             <div class="row" style="margin-top: 20px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <a href="{% url 'edit-question' id=q.id %}" class="btn waves-effect waves-light right">Edit</a>
+                                    <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right">Edit</a>
                                 </div>
                             </div>
                             
@@ -45,10 +45,10 @@
                 {% if page.has_previous or page.has_next %}
                 <div class="row" style="margin-top:20px;margin-bottom:0px;">
                     {% if page.has_previous %}
-                    <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
+                    <a class="btn-small waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
                     {% if page.has_next %}
-                    <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
+                    <a class="btn-small waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
                     {% endif %}
                 </div>
                 {% endif %}
@@ -58,8 +58,8 @@
 </div>
 {% endblock %}
 {% block other %}
-<div class="fixed-action-btn" style="bottom: 40px; right: 40px;">
-    <a class="btn-floating btn-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
+<div class="fixed-action-btn-small" style="bottom: 40px; right: 40px;">
+    <a class="btn-small-floating btn-small-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
 </div>
 {% endblock %}
         
@@ -111,7 +111,7 @@ QSearch = (function () {
                         '</div>' +
                         '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
                             '<div class="col s12">' +
-                                '<a href="/question/' + questions[i].id + '/edit/" class="btn waves-effect waves-light right">Edit</a>' +
+                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right">Edit</a>' +
                             '</div>' +
                         '</div>';
             */
@@ -123,7 +123,7 @@ QSearch = (function () {
                         '</p>' +
                         '<div class="row" style="margin-top: 20px;margin-bottom:10px;">' +
                             '<div class="col s12">' +
-                                '<a href="/question/' + questions[i].id + '/edit/" class="btn waves-effect waves-light right">Edit</a>' +
+                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right">Edit</a>' +
                             '</div>' +
                         '</div>';
             item.innerHTML = inner;
