@@ -63,7 +63,7 @@ def add_question(request):
             question_obj = f.save(commit = False)
             question_obj.created_by = request.user
             question_obj.save()
-            return redirect(reverse('show-question',kwargs={'id': question_obj.id}))
+            return redirect(reverse('all-questions'))
     return render(request, 'qac/add_question.html', {'f': f})
 
 @require_http_methods(['GET', 'POST'])
@@ -275,9 +275,10 @@ def vote_answer(request, id=None, a_id=None):
 @login_required
 def delete_question(request, id = None):
     question_obj = get_object_or_404(Question, id = id)
+    next_page = request.GET.get('next',reverse('all-questions'))
     if question_obj.created_by == request.user:
         question_obj.delete()
-    return redirect(reverse('all-question'))
+    return redirect(next_page)
 
 
 @login_required

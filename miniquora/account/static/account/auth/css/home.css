@@ -11,3 +11,19 @@
 .q_text {
     font-size: 1.1rem;
 }
+
+#question-delete {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(1, 1, 1, 0.7);
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

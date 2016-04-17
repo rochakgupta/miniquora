@@ -9,6 +9,7 @@
     <div class="col s12 m10 offset-m1">
         <div class="card" style="margin-top:20px;">
             <div class="card-content">
+                {% if q_list %}
                 <div class="card-title center" style="border-bottom:5px solid #009688;color:teal;">
                     <h5>My Questions</h5>
                 </div>
@@ -35,7 +36,8 @@
                             <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
                             <div class="row" style="margin-top: 20px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right">Edit</a>
+                                    <a href="{% url 'delete-question' id=q.id %}" class="btn-small waves-effect waves-light right user-question-delete">Delete</a>
+                                    <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right" style="margin-right:20px;">Edit</a>
                                 </div>
                             </div>
                             
@@ -52,19 +54,67 @@
                     {% endif %}
                 </div>
                 {% endif %}
+                {% else %}
+                <div class="card-title center" style="color:teal;">
+                    <h5 class="q_title">You have not asked any questions yet.</h5>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 {% block other %}
-<div class="fixed-action-btn-small" style="bottom: 40px; right: 40px;">
-    <a class="btn-small-floating btn-small-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
+<div class="fixed-action-btn" style="bottom: 40px; right: 40px;">
+    <a class="btn-floating btn-large red tooltipped waves-effect waves-light" data-position="top" data-delay="50" data-tooltip="Ask Question" href="{% url 'add-question' %}"><i class="lage material-icons">add</i></a>
 </div>
 {% endblock %}
         
+{% if q_list %}
 {% block scripts %}
 <script>
+    
+    
+QDelete = (function(){
+    
+    function deleteQuestion(e){
+        e.preventDefault();
+        var div = document.createElement('div');
+        div.setAttribute('id','question-delete');
+        div.innerHTML = '<div class="col s10 m6 offset-s1-m3 card-panel" style="margin:0;">' + 
+                             '<div class="row valign-wrapper">Do you really want to delete your question?' +
+                             '</div>' +
+                             '<div class="row center valign-wrapper" style="margin:0;">' +
+                                '<div class="col s6">' +
+                                    '<a class="btn-small waves-effect waves-light" href="' + this['href'] + '?next={% url "home" id=request.user.id %}">Yes</a>' +
+                                '</div>' +
+                                '<div class="col s6">' +
+                                    '<a class="btn-small waves-effect waves-light" href="#" id="no-question-delete">No</a>' +
+                                '</div>' +
+                             '</div>' +
+                        '</div>';
+        document.body.appendChild(div);
+        $('#no-question-delete').on('click',function(event){
+            event.preventDefault();
+            $('#question-delete').remove();
+        })
+    }
+    
+    function init(){
+        if('{{ request.user.is_authenticated }}' === 'True'){
+            var a_tags = document.querySelectorAll('.user-question-delete');
+            for(var i=0;i<a_tags.length;i++){
+                a_tags[i].addEventListener('click', deleteQuestion);
+            }
+        }
+    }
+    
+    return {
+        init: init
+    }
+})();
+    
+    
 QSearch = (function () {
     var el, results_div, results_div_html, results_after_div;
 
@@ -123,7 +173,8 @@ QSearch = (function () {
                         '</p>' +
                         '<div class="row" style="margin-top: 20px;margin-bottom:10px;">' +
                             '<div class="col s12">' +
-                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right">Edit</a>' +
+                                '<a href="/question/' + questions[i].id + '/delete/" class="btn-small waves-effect waves-light right user-question-delete">Delete</a>' +
+                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right" style="margin-right:20px;">Edit</a>' +
                             '</div>' +
                         '</div>';
             item.innerHTML = inner;
@@ -135,6 +186,7 @@ QSearch = (function () {
         }
         else {
             results_div.attr('style','margin-top:20px;');
+            QDelete.init();
         }
 
     }
@@ -183,6 +235,7 @@ QSearch = (function () {
         results_after_div = results_div.next();
         el = $('#search');
         el.on('input', search);
+        QDelete.init();
     }
     return {
         init: init
@@ -194,4 +247,5 @@ $(document).ready(function () {
 });
 </script>
 {% endblock %}
+{% endif %}
 
