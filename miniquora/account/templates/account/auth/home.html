@@ -47,10 +47,10 @@
                 {% if page.has_previous or page.has_next %}
                 <div class="row" style="margin-top:20px;margin-bottom:0px;">
                     {% if page.has_previous %}
-                    <a class="btn-small waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
+                    <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
                     {% if page.has_next %}
-                    <a class="btn-small waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
+                    <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'home-page' id=request.user.id page_num=page.next_page_number %}">Next</a>
                     {% endif %}
                 </div>
                 {% endif %}

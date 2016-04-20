@@ -38,22 +38,11 @@
                                     </div>
                                 </div>
                                 {% else %}
-                                    {% if not a_user %}
-                                    <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
-                                        <div class="col s6">
-                                            <a href="{% url 'add-answer' id=q.id %}" class="btn-small waves-effect waves-light left">Add Answer</a>
-                                        </div>
-                                        <div class="col s6">
-                                            <p class="right">{{ q.created_by }}</p>
-                                        </div>
-                                    </div>
-                                    {% else %}
                                     <div class="row center valign-wrapper" style="margin-top:20px;margin-bottom:10px;">
                                         <div class="col s12">
-                                            <p class="right">{{ q.created_by }}</p>
+                                            <p class="right" style="text-align: right"><strong>{{ q.created_by }}</strong> </br> on {{ q.created_on|date:"M d, Y" }}</p>
                                         </div>
                                     </div>
-                                    {% endif %}
                                 {% endif %}
 
                                 {% with c_list=q.comments.all %}
@@ -61,9 +50,9 @@
                                 <div class="card-title center" style="color:teal;">
                                     <h6 class="c_head">Comments</h6>
                                 </div>
-                                <ul class="collection" style="margin-bottom:0;">
+                                <ul class="collection" style="margin-bottom:0;margin-top:10px;">
                                     {% for c in c_list %}
-                                        <li class="collection-item"> 
+                                        <li class="collection-item">
                                             <div class="row" style="line-height:normal; margin-bottom:10px;">
                                             <span class="col s12 c_text" style="margin-bottom:10px;margin-top:10px;">{{ c.text }}</span>
                                             {% if c.created_by == request.user %}
@@ -79,9 +68,18 @@
                                 {% endif %}
                                 {% endwith %}
                                 <div class="row center" style="margin-bottom:10px;margin-top:20px;">
+                                    {% if a_user or request.user == q.created_by %}
                                     <div class="col s12">
                                         <a href="{% url 'add-question-comment' id=q.id %}" class="btn-small waves-effect waves-light">Add Comment</a>
                                     </div>
+                                    {% else %}
+                                    <div class="col s6">
+                                            <a href="{% url 'add-answer' id=q.id %}" class="btn-small waves-effect waves-light left">Add Answer</a>
+                                        </div>
+                                    <div class="col s6">
+                                        <a href="{% url 'add-question-comment' id=q.id %}" class="btn-small waves-effect waves-light right">Add Comment</a>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 
                             </div>

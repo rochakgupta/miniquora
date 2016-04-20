@@ -1,8 +1,8 @@
 {% extends 'common/questions.html' %}
 {% load staticfiles %}
 {% block page_title %} Questions {% endblock %}
-{% block extrahead %} 
-<link href="{% static 'qac/css/index.css' %}" rel="stylesheet">
+{% block extrahead %}
+<link href="{% static 'qac/css/index.css' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
 {% endblock %}
 {% load material_form %} 
 {% block content %}
@@ -35,7 +35,7 @@
                             {% else %}
                             <div class="row" style="margin-top: 10px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <p class="right">{{ q.created_by }}</p>
+                                    <p class="right" style="text-align: right"><strong>{{ q.created_by }}</strong> </br> on {{ q.created_on|date:"M d, Y" }}</p>
                                 </div>
                             </div>
                             {% endif %}
@@ -45,10 +45,10 @@
                 {% if page.has_previous or page.has_next %}
                 <div class="row" style="margin-top:20px;margin-bottom:0px;">
                     {% if page.has_previous %}
-                    <a class="btn-small waves-effect waves-light left" style="margin-left:10px;" href="{% url 'all-questions-page' page_num=page.previous_page_number %}">Previous</a>
+                    <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'all-questions-page' page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
                     {% if page.has_next %}
-                    <a class="btn-small waves-effect waves-light right" style="margin-right:10px;" href="{% url 'all-questions-page' page_num=page.next_page_number %}">Next</a>
+                    <a class="btn waves-effect waves-light right" style="margin-right:10px;" href="{% url 'all-questions-page' page_num=page.next_page_number %}">Next</a>
                     {% endif %}
                 </div>
                 {% endif %}
@@ -146,6 +146,13 @@ QSearch = (function () {
         for (var i = 0; i < questions.length; i++) {
             var item = document.createElement('div');
             item.setAttribute('class', 'collection-item');
+
+            var q_date = new Date(questions[i].created_on).toLocaleDateString('en-GB', { day : 'numeric', month : 'short', year : 'numeric' }).split(' ');
+            if(q_date[0].length === 1 ){
+                q_date[0] = '0' + q_date[0];
+            }
+            q_date = q_date[1] + ' ' + q_date[0] + ', ' + q_date[2];
+
             var inner = '<div class="row">' +
                             '<div class="col s12">' +
                                 '<h6 class="card-title" style="line-height:normal;"><a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a></h6>' +
@@ -163,7 +170,7 @@ QSearch = (function () {
                 inner = inner +
                             '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
                                 '<div class="col s12">' +
-                                    '<p class="right">' + questions[i].created_by + '</p>' +
+                                    '<p class="right" style="text-align: right"><strong>' + questions[i].created_by + '</strong> </br> on ' + q_date + '</p>' +
                                 '</div>' +
                             '</div>';
             }
