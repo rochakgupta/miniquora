@@ -110,14 +110,6 @@
     align-items: center;
 }
 
-.collection{
-    margin-bottom:0px;
-}
-
-.card .card-content{
-     padding-top:10px;
-}
-
 .comments_ul {
     border:none;
 }
@@ -131,3 +123,23 @@
 /*.comments_ul .collection-item:last-child {*/
     /*border-bottom:1px solid #e0e0e0;*/
 /*}*/
+
+.answers_ul {
+    border:none;
+}
+.answers_ul > .collection-item {
+    border:none;
+    padding:10px;
+    border-bottom:1px solid #e0e0e0;
+}
+.answers_ul > .collection-item:last-child{
+    border:none;
+}
+
+.question_ul {
+    border:none;
+}
+.question_ul > .collection-item {
+    border:none;
+    padding:10px;
+}

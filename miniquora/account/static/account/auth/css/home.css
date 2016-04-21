@@ -28,6 +28,15 @@
     align-items: center;
 }
 
-.collection{
-    margin-bottom:0px;
+.question_ul {
+    border:none;
 }
+.question_ul > .collection-item {
+    border:none;
+    border-top:1px solid #e0e0e0;
+    padding:10px;
+}
+
+/*.question_ul > .collection-item:last-child{*/
+    /*border-bottom:1px solid #e0e0e0;*/
+/*}*/
