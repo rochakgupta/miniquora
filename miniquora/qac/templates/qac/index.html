@@ -35,7 +35,7 @@
                             {% else %}
                             <div class="row" style="margin-top: 10px;margin-bottom:10px;">
                                 <div class="col s12">
-                                    <p class="right" style="text-align: right"><strong>{{ q.created_by }}</strong> </br> on {{ q.created_on|date:"M d, Y" }}</p>
+                                    <p class="right" style="text-align: right"><strong>{{ q.created_by }}</strong> on {{ q.created_on|date:"M d, Y" }}</p>
                                 </div>
                             </div>
                             {% endif %}
@@ -170,7 +170,7 @@ QSearch = (function () {
                 inner = inner +
                             '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
                                 '<div class="col s12">' +
-                                    '<p class="right" style="text-align: right"><strong>' + questions[i].created_by + '</strong> </br> on ' + q_date + '</p>' +
+                                    '<p class="right" style="text-align: right"><strong>' + questions[i].created_by + '</strong> on ' + q_date + '</p>' +
                                 '</div>' +
                             '</div>';
             }

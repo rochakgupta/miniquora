@@ -109,6 +109,25 @@
     justify-content: center;
     align-items: center;
 }
+
 .collection{
     margin-bottom:0px;
 }
+
+.card .card-content{
+     padding-top:10px;
+}
+
+.comments_ul {
+    border:none;
+}
+.comments_ul .collection-item {
+    padding-left:0;
+    padding-right:0;
+    border:none;
+    border-top:1px solid #e0e0e0;
+}
+
+/*.comments_ul .collection-item:last-child {*/
+    /*border-bottom:1px solid #e0e0e0;*/
+/*}*/
