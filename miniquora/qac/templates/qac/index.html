@@ -1,6 +1,6 @@
 {% extends 'common/questions.html' %}
 {% load staticfiles %}
-{% block page_title %} Questions {% endblock %}
+{% block title %} Questions {% endblock %}
 {% block extrahead %}
 <link href="{% static 'qac/css/index.css' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
 {% endblock %}
@@ -43,7 +43,7 @@
                     {% endfor %}
                 </div>
                 {% if page.has_previous or page.has_next %}
-                <div class="row" style="margin-top:20px;margin-bottom:0px;">
+                <div class="row" style="margin-top:0px;margin-bottom:0px;">
                     {% if page.has_previous %}
                     <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'all-questions-page' page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}

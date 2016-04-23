@@ -80,7 +80,7 @@ def reset_password(request, id=None, otp=None):
 @login_required
 def home(request, id=None, page_num=1):
     questions = Question.objects.filter(created_by=request.user)
-    p = Paginator(questions, 2)
+    p = Paginator(questions, 10)
     current_page = p.page(page_num)
     return render(request, 'account/auth/home.html', {'q_list': current_page.object_list, 'page': current_page})
 
@@ -94,7 +94,7 @@ def search_my_questions(request, id=None):
         return JsonResponse(data)
     questions = request.user.questions_created.filter(
         Q(title__icontains=query_term) | Q(text__icontains=query_term)
-    ).annotate(votes=Count('upvoted_by') - Count('downvoted_by')).order_by('-votes')
+    )
     data['questions'] = [{'id': q.id, 'title': q.title, 'text': q.text} for q in questions]
     return JsonResponse(data)
 

@@ -19,21 +19,30 @@
                 <div class="collection question_ul" style="margin-top:20px;" id="results">
                     {% for q in q_list %}
                         <div class="collection-item">
-                            {% comment %}
+
+
                             <div class="row">
                                 <div class="col s12">
-                                    <h6 class="card-title" style="line-height:normal;"><a href="{% url 'show-question' id=q.id %}" class="q_title">{{ q.title }}</a></h6>
+                                    <p class="card-title" style="line-height:normal;padding:5px 0 5px 0;"><a href="{% url 'show-question' id=q.id %}" class="q_title">{{ q.title }}</a></p>
+                                </div>
+                                <div class="col s12" style="margin-top:10px;">
+                                    <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 10px;margin-bottom:10px;">
+
+                            {% comment %}
+                            <div class="row" style="margin-top: 20px;margin-bottom:20px;">
                                 <div class="col s12">
                                     <a href="{% url 'edit-question' id=q.id %}" class="btn-small waves-effect waves-light right">Edit</a>
                                 </div>
                             </div>
                             {% endcomment %}
-                            
+
+                            {% comment %}
                             <h5 style="line-height:normal;margin-top:20px;margin-bottom:20px;"><a href="{% url 'show-question' id=q.id %}" class="q_title">{{ q.title }}</a></h5>
                             <p class="card-title" style="line-height:normal;"><span class="q_text">{{ q.text }}</span></p>
+                            {% endcomment %}
+
                             <div class="row" style="margin-top: 20px;margin-bottom:10px;">
                                 <div class="col s12">
                                     <a href="{% url 'delete-question' id=q.id %}" class="btn-small waves-effect waves-light right user-question-delete">Delete</a>
@@ -45,7 +54,7 @@
                     {% endfor %}
                 </div>
                 {% if page.has_previous or page.has_next %}
-                <div class="row" style="margin-top:20px;margin-bottom:0px;">
+                <div class="row" style="margin-top:10px;margin-bottom:0px;">
                     {% if page.has_previous %}
                     <a class="btn waves-effect waves-light left" style="margin-left:10px;" href="{% url 'home-page' id=request.user.id page_num=page.previous_page_number %}">Previous</a>
                     {% endif %}
@@ -153,10 +162,17 @@ QSearch = (function () {
         for (var i = 0; i < questions.length; i++) {
             var item = document.createElement('div');
             item.setAttribute('class', 'collection-item');
-            /*
+
             var inner = '<div class="row">' +
                             '<div class="col s12">' +
-                                '<h6 class="card-title" style="line-height:normal;"><a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a></h6>' +
+                                '<p class="card-title" style="line-height:normal;padding:5px 0 5px 0;">' +
+                                    '<a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a>' +
+                                '</p>' +
+                            '</div>' +
+                            '<div class="col s12" style="margin-top:10px;">' +
+                                '<p class="card-title" style="line-height:normal;">' +
+                                    '<span class="q_text">' + questions[i].text + '</span>' +
+                                '</p>' +
                             '</div>' +
                         '</div>' +
                         '<div class="row" style="margin-top: 10px;margin-bottom:10px;">' +
@@ -164,19 +180,21 @@ QSearch = (function () {
                                 '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right">Edit</a>' +
                             '</div>' +
                         '</div>';
-            */
-            var inner = '<h5 style="line-height:normal;margin-top:20px;margin-bottom:20px;">' + 
-                            '<a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a>' + 
-                        '</h5>' +
-                        '<p class="card-title" style="line-height:normal;">' + 
-                            '<span class="q_text">' + questions[i].text + '</span>' + 
-                        '</p>' +
-                        '<div class="row" style="margin-top: 20px;margin-bottom:10px;">' +
-                            '<div class="col s12">' +
-                                '<a href="/question/' + questions[i].id + '/delete/" class="btn-small waves-effect waves-light right user-question-delete">Delete</a>' +
-                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right" style="margin-right:20px;">Edit</a>' +
-                            '</div>' +
-                        '</div>';
+
+
+
+//            var inner = '<h5 style="line-height:normal;margin-top:20px;margin-bottom:20px;">' +
+//                            '<a href="/question/' + questions[i].id + '/" class="q_title">' + questions[i].title + '</a>' +
+//                        '</h5>' +
+//                        '<p class="card-title" style="line-height:normal;">' +
+//                            '<span class="q_text">' + questions[i].text + '</span>' +
+//                        '</p>' +
+//                        '<div class="row" style="margin-top: 20px;margin-bottom:10px;">' +
+//                            '<div class="col s12">' +
+//                                '<a href="/question/' + questions[i].id + '/delete/" class="btn-small waves-effect waves-light right user-question-delete">Delete</a>' +
+//                                '<a href="/question/' + questions[i].id + '/edit/" class="btn-small waves-effect waves-light right" style="margin-right:20px;">Edit</a>' +
+//                            '</div>' +
+//                        '</div>';
             item.innerHTML = inner;
             results_div.append(item);
         }
