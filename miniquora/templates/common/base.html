@@ -16,11 +16,16 @@
                     {% block header-content %}
                     {% url 'login' as login_url %}
                     {% if request.user.is_authenticated %}
+                        {% url 'home' id=request.user.id as home_url %}
                         <ul id="nav-mobile" class="right">
                             <li><a href="#" class="dropdown-button teal-text" data-beloworigin="false" data-activates="dropdown1">{{ request.user.username }}</a>
                                 <ul id="dropdown1" class="dropdown-content" style="opacity:1;">
-                                    <li><a href="{% url 'home' id=request.user.id %}">My Profile</a></li>
-                                    <li><a href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}">Log Out</a></li>
+                                    {% if request.path != home_url %}
+                                        <li><a href="{% url 'home' id=request.user.id %}">My Profile</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'edit-profile' id=request.user.id %}">Edit Profile</a></li>
+                                    {% endif %}
+                                        <li><a href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}">Log Out</a></li>
                                 </ul>
                             </li>
                         </ul>
