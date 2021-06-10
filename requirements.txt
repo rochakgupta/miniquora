@@ -1,4 +1,4 @@
-Django==1.9.2
+Django==2.2.24
 Pillow==3.3.1
 PyMySQL==0.7.1
 django-material==0.6.0
